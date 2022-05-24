@@ -1,7 +1,10 @@
 {
-  "name": "$name$",
-  "version": "$version$",
+  "name": "@svindicium/general",
+  "version": "0.0.1",
   "dependencies": {
-    $END$
+    "lodash-es": "^4.17.21"
+  },
+  "devDependencies": {
+    "@types/lodash-es": "^4.17.6"
   }
 }
