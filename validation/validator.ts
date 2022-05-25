@@ -1,24 +1,58 @@
-import {ObjectErrors, ObjectRules, ObjectValidator, RuleType} from "./index";
-import {isUndefined} from "lodash-es";
+import { FieldErrors, ObjectErrors, ObjectRules, ObjectValidator } from "./index";
+import { isDate, isEmpty, isNumber, isString, isUndefined } from "lodash-es";
 
 const validator = <T>(rules: ObjectRules<T>): ObjectValidator<T> => {
     return async (object: T) => {
         const errors: ObjectErrors<T> = {}
-        for (const field in Object.keys(rules)) {
-            for (const rule in Object.keys(rules[field])) {
-
+        for (const fieldString in Object.keys(rules)) {
+            const fieldName = fieldString as keyof T
+            const fieldRules = rules[fieldName]
+            const fieldError: FieldErrors = []
+            if (fieldRules !== false) {
+                const field = object[fieldName]
+                if (fieldRules.required) {
+                    if (isUndefined(field)) {
+                        fieldError.push("required")
+                    }
+                }
+                if (!isUndefined(field)) {
+                    if (fieldRules.values) {
+                        if (!fieldRules.values.includes(field!)) {
+                            fieldError.push("values")
+                        }
+                    }
+                    if (fieldRules.minlength && isString(field)) {
+                        if (field.length <= fieldRules.minlength) {
+                            fieldError.push("minlength")
+                        }
+                    }
+                    if (fieldRules.maxlength && isString(field)) {
+                        if (field.length >= fieldRules.maxlength) {
+                            fieldError.push("maxlength")
+                        }
+                    }
+                    if (fieldRules.minimum && (isNumber(field) || isDate(field))) {
+                        if (field <= fieldRules.minimum) {
+                            fieldError.push("minimum")
+                        }
+                    }
+                    if (fieldRules.maximum && (isNumber(field) || isDate(field))) {
+                        if (field >= fieldRules.maximum) {
+                            fieldError.push("maximum")
+                        }
+                    }
+                    if (fieldRules.pattern && isString(field)) {
+                        if (fieldRules.pattern.test(field)) {
+                            fieldError.push("pattern")
+                        }
+                    }
+                }
+            }
+            if (!isEmpty(fieldError)) {
+                errors[fieldName] = fieldError
             }
         }
-        return undefined
-    }
-}
-
-const validate = (rule: string, parameter: boolean, value?: any): boolean => {
-    switch (rule) {
-        case RuleType.REQUIRED:
-            return !isUndefined(value)
-        case RuleType.VALUES:
-            return
+        return !isEmpty(errors) ? errors : undefined
     }
 }
 

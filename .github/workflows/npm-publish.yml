@@ -1,0 +1,8 @@
+name: NPM Publish
+
+on:
+  push:
+
+jobs:
+  build:
+    uses: svIndicium/Workflows/.github/workflows/npm-publish.yml@master
