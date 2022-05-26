@@ -4,14 +4,14 @@ import { isDate, isEmpty, isNumber, isString, isUndefined } from "lodash-es";
 const validator = <T>(rules: ObjectRules<T>): ObjectValidator<T> => {
     return async (object: T) => {
         const errors: ObjectErrors<T> = {}
-        for (const fieldString in Object.keys(rules)) {
+        for (const fieldString of Object.keys(rules)) {
             const fieldName = fieldString as keyof T
             const fieldRules = rules[fieldName]
             const fieldError: FieldErrors = []
             if (fieldRules !== false) {
                 const field = object[fieldName]
                 if (fieldRules.required) {
-                    if (isUndefined(field)) {
+                    if (isEmpty(field) || isUndefined(field)) {
                         fieldError.push("required")
                     }
                 }
