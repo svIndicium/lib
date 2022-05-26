@@ -1,4 +1,4 @@
-import { FieldErrors, ObjectErrors, ObjectRules, ObjectValidator } from "./index";
+import { FieldErrors, ObjectErrors, ObjectRules, ObjectValidator } from "../validation";
 import { isDate, isEmpty, isNumber, isString, isUndefined } from "lodash-es";
 
 const validator = <T>(rules: ObjectRules<T>): ObjectValidator<T> => {
@@ -17,7 +17,8 @@ const validator = <T>(rules: ObjectRules<T>): ObjectValidator<T> => {
                 }
                 if (!isUndefined(field)) {
                     if (fieldRules.values) {
-                        if (!fieldRules.values.includes(field!)) {
+                        // @ts-ignore
+                        if (!fieldRules.values.includes(field)) {
                             fieldError.push("values")
                         }
                     }
