@@ -11,7 +11,7 @@ const validator = <T>(rules: ObjectRules<T>): ObjectValidator<T> => {
             if (fieldRules !== false) {
                 const field = object[fieldName]
                 if (fieldRules.required) {
-                    if (isEmpty(field) || isUndefined(field)) {
+                    if (isUndefined(field) || (isEmpty(field) && !isDate(field))) {
                         fieldError.push("required")
                     }
                 }
