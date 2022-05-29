@@ -1,6 +1,10 @@
 {
-  "name": "@svindicium/general-lib",
-  "version": "0.0.3",
+  "name": "@svindicium/lib",
+  "version": "0.0.4",
+  "publishConfig": {
+    "registry":"https://npm.pkg.github.com"
+  },
+  "repository": "git://github.com/svIndicium/lib.git",
   "dependencies": {
     "lodash-es": "^4.17.21"
   },
